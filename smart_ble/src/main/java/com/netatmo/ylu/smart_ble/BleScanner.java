@@ -20,6 +20,7 @@ public class BleScanner {
     private List<ScanFilter> scanFilters;
     private ScanSettings scanSettings;
     private ScanResultResolver resultResolver;
+    private BleScanParameters parameters;
 
     public BleScanner(Context mContext) {
         this.mContext = mContext;
@@ -59,6 +60,18 @@ public class BleScanner {
         };
     }
 
+    private ScanFilter initScanFilter(){
+        if(parameters == null){
+            return null;
+        }
+        ScanFilter.Builder builder = new ScanFilter.Builder();
+        builder.setManufacturerData(parameters.getManufacturerId(),
+                parameters.getManufacturerByte(),
+                parameters.getManufacturerByteMask());
+        return null;
+
+    }
+
     public void start(){
         bluetoothLeScanner.startScan(scanFilters,scanSettings,mScanCallback);
     }
@@ -73,5 +86,9 @@ public class BleScanner {
 
     public void setResultResolver(ScanResultResolver resultResolver){
         this.resultResolver = resultResolver;
+    }
+
+    public void setParameters(BleScanParameters parameters){
+        this.parameters = parameters;
     }
 }
