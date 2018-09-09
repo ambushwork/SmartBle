@@ -8,14 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.netatmo.ylu.smart_ble.BleDevice;
+import com.netatmo.ylu.smart_ble.BluetoothLEDevice;
 
 import java.util.List;
 
 public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.BleDeviceHolder> {
 
     private Context context;
-    private List<BleDevice> list;
+    private List<Accessory> list;
 
     public DeviceAdapter(Context context) {
         this.context = context;
@@ -30,9 +30,9 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.BleDeviceH
 
     @Override
     public void onBindViewHolder(@NonNull BleDeviceHolder holder, int position) {
-        BleDevice bleDevice = list.get(position);
-        holder.name.setText(bleDevice.getName());
-        holder.deviceId.setText(bleDevice.getMacAddress());
+        Accessory accessory = list.get(position);
+        holder.name.setText(accessory.getName());
+        holder.deviceId.setText(accessory.getAccessoryId());
     }
 
 
@@ -41,8 +41,9 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.BleDeviceH
         return list.size();
     }
 
-    public void setDevices(List<BleDevice> bleDevices){
-        this.list = bleDevices;
+    public void setDevices(List<Accessory> bluetoothLEDevices){
+        this.list = bluetoothLEDevices;
+        notifyDataSetChanged();
     }
 
 

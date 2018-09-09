@@ -21,6 +21,7 @@ public class BleScanner {
     private ScanSettings scanSettings;
     private ScanResultResolver resultResolver;
     private BleScanParameters parameters;
+    private BLEDeviceStore deviceStore = new BLEDeviceStore();
 
     public BleScanner(Context mContext) {
         this.mContext = mContext;
@@ -45,12 +46,13 @@ public class BleScanner {
             @Override
             public void onScanResult(int callbackType, ScanResult result) {
                 super.onScanResult(callbackType, result);
-                resultResolver.onResolve(result);
+                deviceStore.addDevice(BluetoothLEDevice.createDevice(result));
             }
 
             @Override
             public void onBatchScanResults(List<ScanResult> results) {
                 super.onBatchScanResults(results);
+                //todo
             }
 
             @Override
@@ -60,16 +62,8 @@ public class BleScanner {
         };
     }
 
-    private ScanFilter initScanFilter(){
-        if(parameters == null){
-            return null;
-        }
-        ScanFilter.Builder builder = new ScanFilter.Builder();
-        builder.setManufacturerData(parameters.getManufacturerId(),
-                parameters.getManufacturerByte(),
-                parameters.getManufacturerByteMask());
-        return null;
-
+    public void addScanFilter(ScanFilter scanFilter){
+        scanFilters.add(scanFilter);
     }
 
     public void start(){
