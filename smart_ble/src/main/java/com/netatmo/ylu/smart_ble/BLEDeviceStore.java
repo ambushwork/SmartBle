@@ -13,7 +13,8 @@ public class BLEDeviceStore {
 
     @NonNull
     private final Map<String, BluetoothLEDevice> deviceMap;
-    private List<OnDeviceChangeListener> listenerList = new ArrayList<>();
+    @Nullable
+    private OnDeviceChangeListener<BluetoothLEDevice> deviceChangeListener ;
 
     public BLEDeviceStore() {
         deviceMap = new HashMap<>();
@@ -24,6 +25,9 @@ public class BLEDeviceStore {
             deviceMap.get(bluetoothLEDevice.getIdentity()).updateDevice(bluetoothLEDevice);
         } else {
             deviceMap.put(bluetoothLEDevice.getIdentity(), bluetoothLEDevice);
+            if(deviceChangeListener != null) {
+                deviceChangeListener.onDeviceFound(bluetoothLEDevice);
+            }
         }
     }
 
@@ -33,7 +37,11 @@ public class BLEDeviceStore {
 
     public void removeDevice(@NonNull String identity){
         if(deviceMap.containsKey(identity)){
-            deviceMap.remove(identity);
+            BluetoothLEDevice device = deviceMap.remove(identity);
+            if(deviceChangeListener != null){
+                deviceChangeListener.onDeviceLost(device);
+            }
+
         }
     }
 
@@ -46,9 +54,8 @@ public class BLEDeviceStore {
         deviceMap.clear();
     }
 
-    public void addListener(OnDeviceChangeListener listener){
-        listenerList.add(listener);
+    public void setListener(@NonNull OnDeviceChangeListener<BluetoothLEDevice> listener){
+        deviceChangeListener = listener;
     }
-
 
 }

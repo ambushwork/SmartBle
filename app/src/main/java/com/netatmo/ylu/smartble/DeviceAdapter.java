@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.netatmo.ylu.smart_ble.BluetoothLEDevice;
+import com.netatmo.ylu.smartble.nap.Accessory;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.BleDeviceH
     @NonNull
     @Override
     public BleDeviceHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View rootView = LayoutInflater.from(context).inflate(R.layout.list_item,parent);
+        View rootView = LayoutInflater.from(context).inflate(R.layout.list_item,parent,false);
         return new BleDeviceHolder(rootView);
     }
 
@@ -43,7 +43,6 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.BleDeviceH
 
     public void setDevices(List<Accessory> bluetoothLEDevices){
         this.list = bluetoothLEDevices;
-        notifyDataSetChanged();
     }
 
 

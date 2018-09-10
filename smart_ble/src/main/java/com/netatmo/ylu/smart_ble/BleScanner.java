@@ -19,20 +19,19 @@ public class BleScanner {
     private ScanCallback mScanCallback;
     private List<ScanFilter> scanFilters;
     private ScanSettings scanSettings;
-    private ScanResultResolver resultResolver;
-    private BleScanParameters parameters;
-    private BLEDeviceStore deviceStore = new BLEDeviceStore();
+    private BLEDeviceStore deviceStore ;
 
-    public BleScanner(Context mContext) {
+    public BleScanner(Context mContext, BLEDeviceStore store) {
         this.mContext = mContext;
+        this.deviceStore = store;
         init();
     }
 
-    private void init(){
+    private void init() {
         final BluetoothManager bluetoothManager =
                 (BluetoothManager) mContext.getSystemService(Context.BLUETOOTH_SERVICE);
-        if(bluetoothManager == null){
-            Log.e("BleScanner","Can't get BluetoothManager.");
+        if (bluetoothManager == null) {
+            Log.e("BleScanner", "Can't get BluetoothManager.");
             return;
         }
         BluetoothAdapter mBluetoothAdapter = bluetoothManager.getAdapter();
@@ -62,27 +61,19 @@ public class BleScanner {
         };
     }
 
-    public void addScanFilter(ScanFilter scanFilter){
+    public void addScanFilter(ScanFilter scanFilter) {
         scanFilters.add(scanFilter);
     }
 
-    public void start(){
-        bluetoothLeScanner.startScan(scanFilters,scanSettings,mScanCallback);
+    public void start() {
+        bluetoothLeScanner.startScan(scanFilters, scanSettings, mScanCallback);
     }
 
-    public void stop(){
+    public void stop() {
         bluetoothLeScanner.stopScan(mScanCallback);
     }
 
-    public void addScanFilters(ScanFilter scanFilter){
+    public void addScanFilters(ScanFilter scanFilter) {
         scanFilters.add(scanFilter);
-    }
-
-    public void setResultResolver(ScanResultResolver resultResolver){
-        this.resultResolver = resultResolver;
-    }
-
-    public void setParameters(BleScanParameters parameters){
-        this.parameters = parameters;
     }
 }

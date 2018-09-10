@@ -60,7 +60,7 @@ public class BluetoothLEDevice {
 
     @NonNull
     public String getIdentity(){
-        return getMacAddress();
+        return bluetoothDevice.getAddress();
     }
 
     public static BluetoothLEDevice createDevice(ScanResult scanResult){

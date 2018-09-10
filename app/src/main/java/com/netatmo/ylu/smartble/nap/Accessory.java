@@ -1,4 +1,4 @@
-package com.netatmo.ylu.smartble;
+package com.netatmo.ylu.smartble.nap;
 
 import com.netatmo.ylu.smart_ble.BluetoothLEDevice;
 

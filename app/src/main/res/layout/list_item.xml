@@ -8,11 +8,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text = "Netatmo Device"
+        android:textColor="@color/colorAccent"
         android:id="@+id/name"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/colorAccent"
         tools:text = "70:ee:f5:2f:3f:44"
         android:id="@+id/mac"/>
 </LinearLayout>

@@ -4,14 +4,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class BleManager {
 
     private BLEDeviceStore deviceStore;
     private BleScanner scanner;
-    private HashMap<String, List<?>> listenerMap;
+    private List<?> deviceList = new ArrayList<>();
 
     public BleManager(@NonNull BleScanner scanner, @NonNull BLEDeviceStore store){
         this.scanner = scanner;
@@ -27,28 +26,25 @@ public class BleManager {
         return deviceStore.getDevice(deviceId);
     }
 
-    public <T> BluetoothLEDevice addListListener(final String tag,
-                                                 final OnDeviceListListener<T> listListener,
-                                                 final DeviceConverter<T> converter){
+    public <T> void setScanListener(final OnDeviceChangeListener<T> deviceChangeListener,
+                                    final DeviceConverter<T> converter){
 
-        if(! listenerMap.containsKey(tag)){
-            listenerMap.put(tag, new ArrayList<T>());
-        }
-        deviceStore.addListener(new OnDeviceChangeListener() {
+        deviceStore.setListener(new OnDeviceChangeListener<BluetoothLEDevice>() {
+
             @Override
             public void onDeviceFound(BluetoothLEDevice bluetoothLEDevice) {
-                T device = converter.convert(bluetoothLEDevice);
-                listenerMap.get(tag).add(device);
-                listListener.onDeviceListChanged(listenerMap.get(tag));
+                deviceChangeListener.onDeviceFound(converter.convert(bluetoothLEDevice));
             }
 
             @Override
             public void onDeviceLost(BluetoothLEDevice bluetoothLEDevice) {
-                T device = converter.convert(bluetoothLEDevice);
-                listenerMap.get(tag).remove(device);
-                listListener.onDeviceListChanged(listenerMap.get(tag));
+                deviceChangeListener.onDeviceLost(converter.convert(bluetoothLEDevice));
             }
         });
+    }
+
+    public void setScanListener(final OnDeviceChangeListener<BluetoothLEDevice> deviceOnDeviceChangeListener){
+        deviceStore.setListener(deviceOnDeviceChangeListener);
     }
 
 
